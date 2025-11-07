@@ -170,9 +170,6 @@ function loop() {
     gameOver = true;
   }
 
-  
-
-  
   // quando saírem da tela, voltam ao início
   if (rato.x > canvas.width) {
     gato.x = 100;
@@ -228,7 +225,6 @@ updateCatFrame = () => {
     {rato.frame = 0;
       rato.x += 50
     }
-
 
   // === GATO E RATO ===
   gato.x += gato.speed;

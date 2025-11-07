@@ -7,6 +7,10 @@ canvas.height = 820;
 // === IMAGENS ===
 const bg = new Image();
 bg.src = "/Images/gameBg.jpeg";
+const gatoImg = new Image();
+gatoImg.src = "/Images/cat.png";
+const ratoImg = new Image();
+ratoImg.src = "/Images/mouse.png";
 
 const lixeiras = [
   { cor: "azul", x: 100, y: 600, img: "/Images/bluebin.png" },
@@ -15,6 +19,26 @@ const lixeiras = [
   { cor: "amarelo", x: 850, y: 600, img: "/Images/yellowbin.png" },
   { cor: "preto", x: 1050, y: 600, img: "/Images/blackbin.png" }
 ];
+
+// Carrega imagens das lixeiras
+const lixeiraImgs = {};
+for (let lixeira of lixeiras) {
+  const img = new Image();
+  img.src = lixeira.img;
+  lixeiraImgs[lixeira.cor] = img;
+}
+
+let gato = { x: 100, y: 700, frame: 0, speed: 5 };
+let rato = { x: 250, y: 710, frame: 0, speed: 5.5 };
+
+// === Função para desenhar sprites ===
+function desenharSprite(img, frame, x, y, frameWidth, frameHeight, escala = 1.5) {
+  ctx.drawImage(
+    img,
+    frame * frameWidth, 0, frameWidth, frameHeight,
+    x, y, frameWidth * escala, frameHeight * escala
+  );
+}
 
 // === TIPOS DE LIXO ===
 const tiposLixo = {
@@ -107,15 +131,13 @@ function loop() {
 
   // Desenha lixeiras
   for (let lixeira of lixeiras) {
-    const img = new Image();
-    img.src = lixeira.img;
-    ctx.drawImage(img, lixeira.x, lixeira.y, 100, 150);
+    ctx.drawImage(lixeiraImgs[lixeira.cor], lixeira.x, lixeira.y, 100, 150);
   }
 
   // Desenha e atualiza o lixo
   lixo.desenhar();
   lixo.cair();
-  lixo.vel += 0.002 // Aumenta a velocidade do lixo com o tempo
+  lixo.vel += 0.002;
 
   // Se o lixo cair no chão
   if (lixo.y > canvas.height - 30) {
@@ -136,16 +158,35 @@ function loop() {
     ctx.fillStyle = "red";
     ctx.font = "60px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("GAME OVER!", canvas.width / 2 - 180, canvas.height / 2);
+    ctx.fillText("GAME OVER!", canvas.width / 2, canvas.height / 2);
     ctx.fillStyle = "white";
     ctx.font = "40px Arial";
-    ctx.fillText("A cidade está suja! 🤢", canvas.width / 2 - 200, canvas.height / 2 + 80);
+    ctx.fillText("A cidade está suja! 🤢", canvas.width / 2, canvas.height / 2 + 80);
     gameOver = true;
   }
 
+  // === GATO E RATO ===
+  gato.x += gato.speed;
+  rato.x += rato.speed;
+
+// troca de frame a cada certo número de pixels percorridos
+if (Math.floor(gato.x / 10) % 6 === 0) gato.frame = (gato.frame + 1) % 6;
+if (Math.floor(rato.x / 8) % 6 === 0) rato.frame = (rato.frame + 1) % 6;
+
+// quando saírem da tela, voltam ao início
+if (rato.x > canvas.width) {
+  gato.x = 100;
+  rato.x = 250;
+}
+
+// desenhar
+desenharSprite(gatoImg, gato.frame, gato.x, gato.y, 88, 38, 1.5);
+desenharSprite(ratoImg, rato.frame, rato.x, rato.y, 161, 47, 0.8);
+
   if (!gameOver) requestAnimationFrame(loop);
 }
- // Inicia o loop do jogo
- bg.onload = () => {
+
+// === INÍCIO DO JOGO ===
+bg.onload = () => {
   loop();
- }
+};

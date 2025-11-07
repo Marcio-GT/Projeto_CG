@@ -17,7 +17,7 @@ const lixeiras = [
   { cor: "verde", x: 350, y: 600, img: "/Images/greenbin.png" },
   { cor: "vermelho", x: 600, y: 600, img: "/Images/redbin.png" },
   { cor: "amarelo", x: 850, y: 600, img: "/Images/yellowbin.png" },
-  { cor: "preto", x: 1050, y: 600, img: "/Images/blackbin.png" }
+  { cor: "preto", x: 1050, y: 600, img: "/Images/blackbin.png" },
 ];
 
 // Carrega imagens das lixeiras
@@ -31,22 +31,13 @@ for (let lixeira of lixeiras) {
 let gato = { x: 100, y: 700, frame: 0, speed: 5 };
 let rato = { x: 250, y: 710, frame: 0, speed: 5.5 };
 
-// === Função para desenhar sprites ===
-function desenharSprite(img, frame, x, y, frameWidth, frameHeight, escala = 1.5) {
-  ctx.drawImage(
-    img,
-    frame * frameWidth, 0, frameWidth, frameHeight,
-    x, y, frameWidth * escala, frameHeight * escala
-  );
-}
-
 // === TIPOS DE LIXO ===
 const tiposLixo = {
-  amarelo: ['🧴','🥤','🛍️'],
-  azul: ['📄','📦','📚'],
-  verde: ['🍸','🍷','🍾'],
-  vermelho: ['⚙️','🔩','🪛'],
-  preto: ['🍌','🥕','🍗']
+  amarelo: ["🧴", "🥤", "🛍️"],
+  azul: ["📄", "📦", "📚"],
+  verde: ["🍸", "🍷", "🍾"],
+  vermelho: ["⚙️", "🔩", "🪛"],
+  preto: ["🍌", "🥕", "🍗"],
 };
 
 // === CLASSE LIXO ===
@@ -55,7 +46,10 @@ class Lixo {
   constructor() {
     const cores = Object.keys(tiposLixo);
     this.cor = cores[Math.floor(Math.random() * cores.length)]; // Seleciona uma cor aleatória
-    this.emoji = tiposLixo[this.cor][Math.floor(Math.random() * tiposLixo[this.cor].length)]; // Seleciona um emoji aleatório da cor escolhida
+    this.emoji =
+      tiposLixo[this.cor][
+        Math.floor(Math.random() * tiposLixo[this.cor].length)
+      ]; // Seleciona um emoji aleatório da cor escolhida
     this.x = Math.random() * (canvas.width - 50); // Posição horizontal aleatória
     this.y = -50;
     this.size = 40;
@@ -80,14 +74,20 @@ let lixoNochao = 0;
 let gameOver = false;
 
 // === EVENTOS DO MOUSE ===
-canvas.addEventListener("mousedown", e => {
+canvas.addEventListener("mousedown", (e) => {
   const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-  if (mx > lixo.x && mx < lixo.x + lixo.size && my > lixo.y - lixo.size && my < lixo.y)
+  const mx = e.clientX - rect.left,
+    my = e.clientY - rect.top;
+  if (
+    mx > lixo.x &&
+    mx < lixo.x + lixo.size &&
+    my > lixo.y - lixo.size &&
+    my < lixo.y
+  )
     lixo.drag = true;
 });
 
-canvas.addEventListener("mousemove", e => {
+canvas.addEventListener("mousemove", (e) => {
   if (lixo.drag) {
     const rect = canvas.getBoundingClientRect();
     lixo.x = e.clientX - rect.left - lixo.size / 2;
@@ -141,6 +141,7 @@ function loop() {
 
   // Se o lixo cair no chão
   if (lixo.y > canvas.height - 30) {
+    // Aqui considera o chão 30 pixels acima da base
     lixoNochao++;
     lixo = new Lixo();
   }
@@ -161,27 +162,50 @@ function loop() {
     ctx.fillText("GAME OVER!", canvas.width / 2, canvas.height / 2);
     ctx.fillStyle = "white";
     ctx.font = "40px Arial";
-    ctx.fillText("A cidade está suja! 🤢", canvas.width / 2, canvas.height / 2 + 80);
+    ctx.fillText(
+      "A cidade está suja! 🤢",
+      canvas.width / 2,
+      canvas.height / 2 + 80
+    );
     gameOver = true;
   }
 
-  // === GATO E RATO ===
-  gato.x += gato.speed;
-  rato.x += rato.speed;
+  
 
-// troca de frame a cada certo número de pixels percorridos
-if (Math.floor(gato.x / 10) % 6 === 0) gato.frame = (gato.frame + 1) % 6;
-if (Math.floor(rato.x / 8) % 6 === 0) rato.frame = (rato.frame + 1) % 6;
+  
+  // quando saírem da tela, voltam ao início
+  if (rato.x > canvas.width) {
+    gato.x = 100;
+    rato.x = 250;
+  }
 
-// quando saírem da tela, voltam ao início
-if (rato.x > canvas.width) {
-  gato.x = 100;
-  rato.x = 250;
-}
+  // === Função para desenhar sprites ===
+  function desenharSprite(
+    img,
+    frame,
+    x,
+    y,
+    frameWidth,
+    frameHeight,
+    escala = 1.5
+  ) {
+    ctx.drawImage(
+      img,
+      frame * frameWidth,
+      0,
+      frameWidth,
+      frameHeight,
+      x,
+      y,
+      frameWidth * escala,
+      frameHeight * escala
+    );
+  }
 
-// desenhar
-desenharSprite(gatoImg, gato.frame, gato.x, gato.y, 88, 38, 1.5);
-desenharSprite(ratoImg, rato.frame, rato.x, rato.y, 161, 47, 0.8);
+  // desenhar
+  // gatoImagg = 528x38 -> 6 frames de 88x38
+  desenharSprite(gatoImg, gato.frame, gato.x, gato.y, 88, 38, 1.5);
+  desenharSprite(ratoImg, rato.frame, rato.x, rato.y, 161, 47, 0.8);
 
   if (!gameOver) requestAnimationFrame(loop);
 }
@@ -189,4 +213,24 @@ desenharSprite(ratoImg, rato.frame, rato.x, rato.y, 161, 47, 0.8);
 // === INÍCIO DO JOGO ===
 bg.onload = () => {
   loop();
+  setInterval(updateCatFrame, 100);
+};
+
+updateCatFrame = () => {
+  // troca de frame a cada certo número de pixels percorridos
+  gato.frame++;
+  if (gato.frame == 6) {
+    gato.frame = 0;
+    gato.x += 50
+  }
+  rato.frame++;
+  if (rato.frame == 6) 
+    {rato.frame = 0;
+      rato.x += 50
+    }
+
+
+  // === GATO E RATO ===
+  gato.x += gato.speed;
+  rato.x += rato.speed;
 };

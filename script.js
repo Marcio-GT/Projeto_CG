@@ -108,10 +108,11 @@ canvas.addEventListener("mouseup", () => {
         lixo.y < lixeira.y + 150
       ) {
         if (lixo.cor === lixeira.cor) {
-          pontos += 25; // Acertou o caixote certo
+          pontos += 20; // Acertou o caixote certo
           acertou = true;
         } else {
           pontos -= 10; // Errou o caixote (só perde pontos, sem aumentar erros)
+          acertou = false;
         }
         break;
       }
@@ -120,7 +121,11 @@ canvas.addEventListener("mouseup", () => {
     lixo.drag = false;
 
     // Se acertou, cria novo lixo
-    if (acertou) lixo = new Lixo();
+    if (acertou){
+      lixo = new Lixo();
+    }else{
+      lixo = new Lixo();
+    }
   }
 });
 
@@ -153,11 +158,11 @@ function loop() {
   ctx.fillText(`Lixos no chão: ${lixoNochao}`, 20, 60);
 
   // GAME OVER
-  if (lixoNochao > 15) {
+  if (lixoNochao > 10) {
     ctx.fillStyle = "rgba(0,0,0,0.7)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "red";
-    ctx.font = "60px Arial";
+    ctx.font = "60px OCR A Std, monospace ";
     ctx.textAlign = "center";
     ctx.fillText("GAME OVER!", canvas.width / 2, canvas.height / 2);
     ctx.fillStyle = "white";

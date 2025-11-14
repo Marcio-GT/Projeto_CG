@@ -62,6 +62,7 @@ img{
 
 .btn-final:hover {
     background-color: rgb(165, 151, 178);
+    animation: 0.6s scaleit alternate infinite;
 }
 
 .text-card img{
@@ -80,6 +81,25 @@ img{
     text-align: center;
 
 }
+
+
+
+@keyframes scaleit {
+0% {
+transform: scale(1);
+background-color: salmon;
+}
+80% {
+transform: scale(1);
+background-color: royalblue;
+
+}
+100% {
+transform: scale(2);
+}
+}
+
+
 
 
 

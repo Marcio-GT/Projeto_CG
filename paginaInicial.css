@@ -1,0 +1,14 @@
+body {
+    margin: none;
+    padding: none;
+    font-family: Arial, sans-serif;
+    
+}
+
+img {
+    position: absolute;
+    margin-bottom: none;
+    width: 100%;
+    height: 100%;
+    image: opacity 0.1em; ;
+}

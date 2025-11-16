@@ -4,6 +4,9 @@ const ctx = canvas.getContext("2d");
 canvas.width = 1200;
 canvas.height = 820;
 
+const audio1 = new Audio('/audio/game-over-401236.mp3');
+
+
 // === IMAGENS ===
 const bg = new Image();
 bg.src = "/Images/gameBg.jpeg";
@@ -158,21 +161,26 @@ function loop() {
   ctx.fillText(`Lixos no chão: ${lixoNochao}`, 20, 60);
 
   // GAME OVER
-  if (lixoNochao > 10) {
+  if (lixoNochao >= 2){
     ctx.fillStyle = "rgba(0,0,0,0.7)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "red";
-    ctx.font = "60px OCR A Std, monospace ";
+    ctx.font = "60px OCR A Std, cursive ";
     ctx.textAlign = "center";
     ctx.fillText("GAME OVER!", canvas.width / 2, canvas.height / 2);
     ctx.fillStyle = "white";
-    ctx.font = "40px Arial";
+    ctx.font = "40px cursive";
     ctx.fillText(
       "A cidade está suja! 🤢",
       canvas.width / 2,
-      canvas.height / 2 + 80
+      canvas.height / 2 + 80,
     );
-    gameOver = true;
+    
+    audio1.play();
+    gameOver = true 
+    
+  ;
+   
   }
 
   // quando saírem da tela, voltam ao início
@@ -235,3 +243,4 @@ updateCatFrame = () => {
   gato.x += gato.speed;
   rato.x += rato.speed;
 };
+
